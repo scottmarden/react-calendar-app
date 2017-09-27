@@ -10,13 +10,23 @@ class Calendar extends Component{
         this.state = {
             selected: date,
             focus: date,
+            view: "month",
         };
+    }
+
+    handleSelect(newDate) {
+        let selected = moment(newDate);
+        this.setState({ selected: selected });
     }
 
     previousMonth() {
         let focus = moment(this.state.focus).subtract(1, "month");
         this.setState({ focus: focus });
-        console.log(this.state.focus)
+    }
+
+    resetToday(){
+        let focus = new moment();
+        this.setState({ focus: focus });
     }
 
     nextMonth() {
@@ -34,24 +44,26 @@ class Calendar extends Component{
         let count = 0;
         let startDate = moment(this.state.focus).startOf("month").startOf("week");
         while(count < 5){
-            weeks.push(<Week key={count} date={startDate} />)
+            weeks.push(<Week key={startDate} date={startDate} />)
             startDate = moment(startDate).add(7, "days");
             count++;
         }
         return (
             weeks
-        )
+        );
     }
+
 
     render(){
         return(
             <div>
                 <div className="header">
                     <button onClick={ () => this.previousMonth() }>Previous</button>
-                    <Moment date={this.state.focus} format={"MMMM"} />
+                    <button onClick={ () => this.resetToday() }>Go to Today</button>
                     <button onClick={ () => this.nextMonth() }>Next</button>
-                    {this.renderWeeks()}
                 </div>
+                <Moment date={this.state.focus} format={"MMMM YYYY"} /> 
+                {this.renderWeeks()}
                 
                 <p>Selected: <Moment date={this.state.selected} format={"dddd MMM DD"}/></p>
             </div>
@@ -59,13 +71,12 @@ class Calendar extends Component{
     }
 }
 
-class Week extends React.Component {
+class Week extends Component {
     constructor(props){
         super(props);
         this.state={
             startDate: moment(this.props.date).startOf("week"),
         }
-        console.log(this.state.startDate);
     }
 
     render(){
@@ -76,7 +87,7 @@ class Week extends React.Component {
             date = moment(date).add(1, "days");
             return (
                 <div key={thisDate} className="dayBlock">
-                    <Moment date={thisDate} format={"dddd MMM DD"} />
+                    <Moment date={thisDate} format={"MMM DD"} />
                 </div>
             );
         })
@@ -88,6 +99,33 @@ class Week extends React.Component {
         )
     }
 }
+
+//Can be used in place of rendering the month directly in 'calendar' class.
+
+// class Month extends Component{
+//     renderWeeks(){
+//         let weeks = [];
+//         let count = 0;
+//         let startDate = moment(this.props.focus).startOf("month").startOf("week");
+//         while(count < 5){
+//             weeks.push(<Week key={startDate} date={startDate} />)
+//             startDate = moment(startDate).add(7, "days");
+//             count++;
+//         }
+//         return (
+//             weeks
+//         );
+//     }
+
+//     render(){
+//         return(
+//             <div>
+//                 <Moment date={this.props.focus} format={"MMMM"} /> 
+//                 {this.renderWeeks()}
+//             </div>
+//         )
+//     }
+// }
 
 
 
