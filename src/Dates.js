@@ -10,7 +10,6 @@ class Dates extends Component {
             focusDate: new Date(),
             month: moment().format("MMMM"),
         }
-        console.log(this.state.month);
 
     }
 
