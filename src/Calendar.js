@@ -14,11 +14,6 @@ class Calendar extends Component{
         };
     }
 
-    handleSelect(newDate) {
-        let selected = moment(newDate);
-        this.setState({ selected: selected });
-    }
-
     previousMonth() {
         let focus = moment(this.state.focus).subtract(1, "month");
         this.setState({ focus: focus });
@@ -26,7 +21,8 @@ class Calendar extends Component{
 
     resetToday(){
         let focus = new moment();
-        this.setState({ focus: focus });
+        let selected = focus;
+        this.setState({ selected: selected, focus: focus });
     }
 
     nextMonth() {
@@ -34,8 +30,8 @@ class Calendar extends Component{
         this.setState({ focus: focus });
     }
 
-    select(day) {
-        let selected = this.state.selected;
+    handleSelect(day) {
+        let selected = moment(day);
         this.setState({ selected: selected });
     }
 
@@ -44,7 +40,7 @@ class Calendar extends Component{
         let count = 0;
         let startDate = moment(this.state.focus).startOf("month").startOf("week");
         while(count < 5){
-            weeks.push(<Week key={startDate} date={startDate} />)
+            weeks.push(<Week key={startDate} date={startDate} selected={this.state.selected} onClick={ (day) => this.handleSelect(day)} />)
             startDate = moment(startDate).add(7, "days");
             count++;
         }
@@ -63,9 +59,8 @@ class Calendar extends Component{
                     <button onClick={ () => this.nextMonth() }>Next</button>
                 </div>
                 <Moment date={this.state.focus} format={"MMMM YYYY"} /> 
+                <DayNames />
                 {this.renderWeeks()}
-                
-                <p>Selected: <Moment date={this.state.selected} format={"dddd MMM DD"}/></p>
             </div>
         )
     }
@@ -82,14 +77,25 @@ class Week extends Component {
     render(){
         var days = Array(7).fill(null);
         var date = this.state.startDate;
+        var selected = this.props.selected;
+        var props = this.props;
         days = days.map(function(day, index){
             let thisDate = date;
             date = moment(date).add(1, "days");
-            return (
-                <div key={thisDate} className="dayBlock">
-                    <Moment date={thisDate} format={"MMM DD"} />
-                </div>
-            );
+            if(moment(selected).isSame(thisDate, "day")){
+                return (
+                    <div key={thisDate} className="selected" onClick={ (day) => props.onClick(thisDate)} >
+                        <Moment date={thisDate} format={"MMM DD"} />
+                    </div>
+                );
+            }else{
+                return (
+                    <div key={thisDate} className="dayBlock" onClick={ (day) => props.onClick(thisDate)}>
+                        <Moment date={thisDate} format={"MMM DD"} />
+                    </div>
+                );    
+            }
+            
         })
         
         return(
@@ -100,6 +106,21 @@ class Week extends Component {
     }
 }
 
+class DayNames extends Component {
+    render(){
+        return(
+            <div className="dayNames">
+                <span className="day">Sun</span>
+                <span className="day">Mon</span>
+                <span className="day">Tue</span>
+                <span className="day">Wed</span>
+                <span className="day">Thu</span>
+                <span className="day">Fri</span>
+                <span className="day">Sat</span>
+            </div>
+        );
+    }
+}
 //Can be used in place of rendering the month directly in 'calendar' class.
 
 // class Month extends Component{
