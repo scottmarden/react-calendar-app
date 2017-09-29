@@ -1,3 +1,21 @@
+This is a calendar app I've created with Facebook's React javascript library. The intention is to create a component that can be used in a variety of situations, whether that is as a calendar widget in a sidebar on a website, or as the main interface in a larger calendar web app. 
+
+Version 0.1:
+  - On load, the calendar is focused on the current month, with today 'selected'.
+  - You can scroll forward or backwards month by month. 
+  - Clicking a day 'selects' and highlights that day.
+
+Still to come: 
+  - Responsive styling.
+  - Jumping to a specific month or year
+  - Adding tasks
+  - Ability to plug in a backend or REST API to display information in the days on the calendar.
+
+
+
+
+#### Below you'll find the README.md as provided by Create React App. See their github repo for more information. Happy coding! -sm
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
